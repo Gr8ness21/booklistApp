@@ -32,7 +32,11 @@ app.get("/books", (req, res)=>{
     res.render("index.ejs")
 });
 
-// N.
+// NEW
+app.get("/books/new", (req, res)=>{
+    res.render("new.ejs")
+});
+
 // D.
 // U.
 
