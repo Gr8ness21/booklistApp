@@ -28,8 +28,18 @@ app.get("/", (req, res)=>{
 });
 
 // INDEX
-app.get("/books", (req, res)=>{
-    res.render("index.ejs")
+app.get("/books", async (req, res) =>{
+    // res.render("index.ejs") <- for testing
+    try{
+        const allBooks = await Book.find({});
+        res.render("index.ejs", {
+            books: allBooks
+        });
+    }catch(error){
+        console.error(error)
+        res.status(500).send(error)
+    }
+
 });
 
 // NEW
@@ -52,12 +62,13 @@ app.post('/books', (req, res) => {
     Book.create(req.body)
         .then(createdBook => {
             console.log('Book has successfuly been created!')
+            console.log(req.body)
+            res.redirect("/books")
         }).catch(error => {
             console.error('Error Creating Book!')
+            res.status(500).send("ISSUE CREATING BOOK!")
         })
-
-
-    res.send(req.body)
+    
 });
 
 // E.
