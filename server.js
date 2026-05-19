@@ -16,14 +16,21 @@ db.on('disconnected', () => console.log('mongo disconnected'));
 
 // MIDDLEWARE
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static("public"));
+app.set("view engine", "ejs");
 
 // ROUTES
 // INDUCES
 
+// HOME :)
+app.get("/", (req, res)=>{
+    res.render("home.ejs")
+});
+
 // INDEX
-// app.get("/books", (req, res)=>{
-//     res.send(books)
-// });
+app.get("/books", (req, res)=>{
+    res.render("index.ejs")
+});
 
 // N.
 // D.
