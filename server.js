@@ -72,7 +72,18 @@ app.post('/books', (req, res) => {
 });
 
 // E.
-// S.
+// SHOW
+app.get("/books/:id",async (req, res) =>{
+    // res.render("show.ejs") <-fine for rendering simple page
+    try{
+        const foundBook = await Book.findById(req.params.id)
+        res.render("show.ejs", {
+            book: foundBook,
+        });
+    }catch(error){
+        res.status(500).send("ISSUE FINDING INDIVIDUAL BOOK!")
+    }
+});
 
 // PORT
 const PORT = process.env.PORT;
