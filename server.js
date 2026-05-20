@@ -62,7 +62,26 @@ app.delete("/books/:id", async (req, res) =>{
 });
 
 
-// U.
+// UPDATE
+app.put("/books/:id", async (req, res) =>{
+    if(req.body.completed === 'on'){
+        req.body.completed = true;
+    } else {
+        req.body.completed = false;
+    }
+
+    try{
+        const updatedBook = await Book.findByIdAndUpdate(
+            req.params.id,
+            req.body,
+            { new: true }
+        ).exec();
+        res.redirect(`/books/${req.params.id}`)
+    }catch(error){
+        console.error(error);
+        res.status(500).send("Small issue with the update...")
+    }
+});
 
 // CREATE
 app.post('/books', (req, res) => {
@@ -85,7 +104,24 @@ app.post('/books', (req, res) => {
     
 });
 
-// E.
+// EDIT
+app.get("/books/:id/edit", async (req, res) =>{
+    try{
+        //Grab the "found book"
+        const foundBook = await Book.findById(req.params.id)
+
+        // Book ! found?
+        if(!foundBook){
+            return res.status(404).send("Book Not Found")
+        }
+
+        res.render("edit.ejs", { book: foundBook })
+    }catch(error){
+        console.error(error)
+        res.status(500).send("Server Issue!")
+    }
+});
+
 // SHOW
 app.get("/books/:id",async (req, res) =>{
     // res.render("show.ejs") <-fine for rendering simple page
