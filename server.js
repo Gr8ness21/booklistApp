@@ -2,6 +2,7 @@
 const express = require("express");
 const app = express();
 require("dotenv").config();
+const methodOverride = require("method-override");
 const mongoose = require("mongoose");
 const Book = require("./models/BookModel");
 
@@ -18,6 +19,7 @@ db.on('disconnected', () => console.log('mongo disconnected'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.set("view engine", "ejs");
+app.use(methodOverride("_method"));
 
 // ROUTES
 // INDUCES
@@ -47,7 +49,19 @@ app.get("/books/new", (req, res)=>{
     res.render("new.ejs")
 });
 
-// D.
+// DELETE
+app.delete("/books/:id", async (req, res) =>{
+    // res.send("Deleting Book...")
+    try{
+        await Book.findByIdAndDelete(req.params.id);
+        res.redirect("/books");
+    }catch(error){
+        console.error(error)
+        res.status(500).send("There was an issue Deleting the book...")
+    }
+});
+
+
 // U.
 
 // CREATE
